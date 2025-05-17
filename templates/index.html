@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Home - Stock Portfolio App{% endblock %}
+{% block content %}
+<div class="mui-form">
+  <h1>Welcome to the Stock Portfolio App</h1>
+  <form method="POST">
+    <div class="form-control">
+      <label for="user_type">Select your level:</label>
+      <select name="user_type" id="user_type" class="mui-select">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+      </select>
+    </div>
+    <button type="submit" class="mui-btn">Continue</button>
+  </form>
+</div>
+{% endblock %}

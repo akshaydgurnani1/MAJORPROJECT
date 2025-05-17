@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Chat - Stock Portfolio App{% endblock %}
+{% block content %}
+<div class="chat-container">
+  <h1>AI Portfolio Assistant</h1>
+  <div class="chat-box" id="chat-box">
+    <!-- Chat messages will appear here -->
+  </div>
+  <div class="button-container">
+    <button class="command-btn" onclick="sendCommand('portfolio')">Portfolio Overview</button>
+    <button class="command-btn" onclick="sendCommand('stock sentiment')">Stock Sentiment</button>
+    <button class="command-btn" onclick="sendCommand('current returns')">Current Returns</button>
+    <button class="command-btn" onclick="sendCommand('diversify')">Diversify Portfolio</button>
+  </div>
+</div>
+<script>
+function displayMessage(message, isUser) {
+  const chatBox = document.getElementById('chat-box');
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('message');
+  messageDiv.classList.add(isUser ? 'user-message' : 'chatbot-message');
+  messageDiv.innerText = message;
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function sendCommand(command) {
+  displayMessage("You: " + command, true);
+  const formData = new FormData();
+  formData.append("user_message", command);
+  fetch('{{ url_for("get_response") }}', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    displayMessage("Bot: " + data.response, false);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+</script>
+{% endblock %}

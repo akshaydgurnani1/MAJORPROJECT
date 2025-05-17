@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Add or Manage Stocks{% endblock %}
+{% block content %}
+<h2>Add or Manage Your Stocks</h2>
+
+<form action="{{ url_for('submit') }}" method="POST" id="stock-form">
+  <div id="stock-entries">
+    <div class="stock-entry">
+      <label>Person:
+        <input type="text" name="person_name" required placeholder="e.g. Akshay">
+      </label>
+
+      <label>Stock Ticker:
+        <select name="stock_name" required>
+          <option value="" disabled selected>Select a stock</option>
+          {% for t in [
+            "DRREDDY.NS","HEROMOTOCO.NS","BPCL.NS","BAJFINANCE.NS","ONGC.NS",
+            "UPL.NS","SBIN.NS","LT.NS","SBILIFE.NS","HINDUNILVR.NS","TATAMOTORS.NS",
+            "NESTLEIND.NS","ICICIBANK.NS","TATACONSUM.NS","ASIANPAINT.NS","M&M.NS",
+            "BAJAJFINSV.NS","INFY.NS","TATASTEEL.NS","ITC.NS","BHARTIARTL.NS",
+            "WIPRO.NS","SUNPHARMA.NS","HDFCBANK.NS","TCS.NS","HINDALCO.NS",
+            "BRITANNIA.NS","CIPLA.NS","DIVISLAB.NS","COALINDIA.NS","MARUTI.NS",
+            "KOTAKBANK.NS","GRASIM.NS","POWERGRID.NS","ULTRACEMCO.NS","HCLTECH.NS",
+            "RELIANCE.NS","AXISBANK.NS","NTPC.NS"
+          ] %}
+            <option value="{{ t }}">{{ t }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>Quantity:
+        <input type="number" name="quantity" min="1" required>
+      </label>
+    </div>
+  </div>
+
+  <button type="button" onclick="addRow()">Add Another Stock</button>
+  <button type="submit" name="plain_submit">Save Portfolio</button>
+  <button type="submit" name="optimize_button">Optimize Portfolio</button>
+</form>
+
+<h3>Current Stocks in DB:</h3>
+<ul>
+  {% for s in stocks %}
+    <li>{{ s.person_name }} → {{ s.ticker }} - {{ s.quantity }}
+      <a href="{{ url_for('delete_stock', stock_id=s.id) }}" style="color:red;">[Delete]</a>
+    </li>
+  {% endfor %}
+</ul>
+
+<script>
+function addRow() {
+  const c = document.getElementById('stock-entries');
+  const div = document.createElement('div');
+  div.classList.add('stock-entry');
+  div.innerHTML = `
+    <label>Person:
+      <input type="text" name="person_name" required placeholder="e.g. Akshay">
+    </label>
+
+    <label>Stock Ticker:
+      <select name="stock_name" required>
+        <option value="" disabled selected>Select a stock</option>
+        ${Array.from(document.querySelectorAll('select[name="stock_name"]')[0].options)
+               .slice(1)                 /* skip first placeholder */
+               .map(o => '<option value="'+o.value+'">'+o.text+'</option>')
+               .join('')}
+      </select>
+    </label>
+
+    <label>Quantity:
+      <input type="number" name="quantity" min="1" required>
+    </label>`;
+  c.appendChild(div);
+}
+</script>
+{% endblock %}

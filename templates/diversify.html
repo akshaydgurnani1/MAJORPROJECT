@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Diversification Recommendations{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>Diversification Recommendations</h2>
+  
+  {% if recommendations and recommendations|length > 0 %}
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Volatility</th>
+          <th>Average Forecast</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in recommendations %}
+          <tr>
+            <td>{{ rec.Ticker }}</td>
+            <td>{{ "{:.4f}".format(rec.Volatility) }}</td>
+            <td>{{ "{:.4f}".format(rec.AvgForecast) }}</td>
+            <td>{{ "{:.4f}".format(rec.Score) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No diversification recommendations found.</p>
+  {% endif %}
+  
+  <p style="margin-top: 20px;">
+    <a href="{{ url_for('portfolio') }}" class="back-link">Back to Portfolio</a>
+  </p>
+</div>
+{% endblock %}

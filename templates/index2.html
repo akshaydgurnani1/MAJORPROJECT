@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio</title>
+</head>
+<body>
+    <h2>Stock Portfolio</h2>
+    
+    <form method="POST">
+        <label for="stock_name">Select Stock:</label>
+        <select name="stock_name" id="stock_name" required>
+            <option value="" disabled selected>Select a stock</option>
+            <option value="RELIANCE.NS">Reliance Industries (RELIANCE.NS)</option>
+            <option value="TCS.NS">Tata Consultancy Services (TCS.NS)</option>
+            <option value="HDFCBANK.NS">HDFC Bank (HDFCBANK.NS)</option>
+            <option value="INFY.NS">Infosys (INFY.NS)</option>
+            <option value="ICICIBANK.NS">ICICI Bank (ICICIBANK.NS)</option>
+            <option value="HINDUNILVR.NS">Hindustan Unilever (HINDUNILVR.NS)</option>
+            <option value="SBIN.NS">State Bank of India (SBIN.NS)</option>
+            <option value="BAJFINANCE.NS">Bajaj Finance (BAJFINANCE.NS)</option>
+            <option value="KOTAKBANK.NS">Kotak Mahindra Bank (KOTAKBANK.NS)</option>
+            <option value="BHARTIARTL.NS">Bharti Airtel (BHARTIARTL.NS)</option>
+            <option value="ITC.NS">ITC Limited (ITC.NS)</option>
+            <option value="LT.NS">Larsen & Toubro (LT.NS)</option>
+            <option value="ASIANPAINT.NS">Asian Paints (ASIANPAINT.NS)</option>
+            <option value="HCLTECH.NS">HCL Technologies (HCLTECH.NS)</option>
+            <option value="MARUTI.NS">Maruti Suzuki (MARUTI.NS)</option>
+        </select>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" required>
+
+        <button type="submit">Add Stock</button>
+    </form>
+
+    <h3>Saved Stocks:</h3>
+    <ul>
+        {% for stock in stocks %}
+            <li>{{ stock.ticker }} - {{ stock.quantity }} 
+                <a href="{{ url_for('delete', id=stock.id) }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

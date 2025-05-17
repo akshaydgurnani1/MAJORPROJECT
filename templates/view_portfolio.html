@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}View Portfolio{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+  <!-- DATABASE TABLE ------------------------------------------------------>
+  <h2 class="mb-3" style="color:var(--theme-primary);">Stocks in Database</h2>
+  {% if portfolios %}
+    <div class="table-responsive mb-4">
+      <table class="table table-striped table-bordered shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Ticker</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for p in portfolios %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.ticker }}</td>
+            <td>{{ p.quantity }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No data found in the database.</p>
+  {% endif %}
+
+  <!-- CSV SECTION --------------------------------------------------------->
+  <hr>
+  <h2 class="mb-3" style="color:var(--theme-primary);">Saved CSV Portfolios</h2>
+  {% if saved_files %}
+    <div class="table-responsive">
+      <table class="table table-hover shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Filename</th>
+            <th scope="col" style="width:180px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for f in saved_files %}
+          <tr>
+            <td>{{ f }}</td>
+            <td>
+              <a href="{{ url_for('opt_saved', filename=f) }}"
+                 class="btn btn-sm btn-theme me-2">
+                 Optimize
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No CSV portfolios found in <code>/portfolios</code>.</p>
+  {% endif %}
+
+  <!-- BACK BUTTON --------------------------------------------------------->
+  <a href="{{ url_for('home') }}" class="btn btn-outline-primary mt-4">Back</a>
+</div>
+{% endblock %}
