@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Beginner Tutorial - Stock Portfolio App{% endblock %}
+{% block content %}
+<div class="tutorial-container">
+  <h1>Beginner Tutorial: Stock Trading Concepts</h1>
+  <div class="steps-area" id="steps-area">
+    <div class="timeline" id="timeline">
+      <!-- Steps will be loaded here -->
+    </div>
+  </div>
+  <button id="next-step-btn" class="btn-tutorial">Next Step</button>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+const tutorialSteps = [
+  { 
+    title: "What are Stocks?", 
+    description: "Stocks represent ownership in a company.",
+    detailed: "When you buy a stock, you buy a small piece of that company. Companies issue stocks to raise money, and in return, investors receive potential dividends and voting rights.",
+    image: "https://wallpaperaccess.com/full/1393720.jpg"
+  },
+  { 
+    title: "Market Capitalization (Market Cap)", 
+    description: "Market Cap is the total market value of a company’s outstanding shares.",
+    detailed: "Market capitalization is calculated by multiplying the stock price by the total number of shares. It is used to classify companies as small-cap, mid-cap, or large-cap.",
+    charts: true
+  },
+  { 
+    title: "Dividends", 
+    description: "Dividends are payments made by a company to its shareholders.",
+    detailed: "Dividends provide a way for companies to share profits with investors. Not all companies pay dividends, but for those that do, it's typically on a quarterly basis."
+  },
+  { 
+    title: "Bull and Bear Markets", 
+    description: "A Bull Market is when prices are rising, while a Bear Market is when prices are falling.",
+    detailed: "A bull market is characterized by rising prices and investor confidence, while a bear market occurs when prices decline and pessimism prevails.",
+    image: "https://papers.nobsteel.xyz/uploads/Bitnob_Blog_Artboard_1_copy_34copy_copy_4_7dc565fd0d.jpg"
+  },
+  { 
+    title: "Exchanges and Brokers", 
+    description: "Exchanges are platforms where stocks are bought and sold.",
+    detailed: "Major exchanges like the NYSE and NASDAQ facilitate the trading of stocks. Brokers act as intermediaries between buyers and sellers.",
+    image: "https://th.bing.com/th/id/OIP.Dylm6wZCKKKqm_2KIAdjswHaE7?rs=1&pid=ImgDetMain"
+  },
+  { 
+    title: "Technical vs Fundamental Analysis", 
+    description: "Technical Analysis analyzes historical price data.",
+    detailed: "Technical analysis focuses on charts and patterns to predict future price movements, while fundamental analysis evaluates a company's financial health and market position.",
+    image: "https://th.bing.com/th/id/OIP.0fBuWHTdceTCHjIj9IkuRwHaE8?pid=ImgDet&w=178&h=118&c=7&dpr=1.5"
+  },
+  { 
+    title: "Key Terminologies", 
+    description: "Key terms include P/E Ratio, EPS, Market Orders, etc.",
+    detailed: "Understanding these terms helps in making informed investment decisions. The P/E ratio indicates how much investors are willing to pay per dollar of earnings."
+  },
+  { 
+    title: "Price Movement Over Time", 
+    description: "This chart illustrates the historical price movements of a stock.",
+    detailed: "Analyzing price movements over different time frames can help identify trends and make predictions about future price movements.",
+    charts: true
+  },
+  { 
+    title: "Portfolio Optimization", 
+    description: "Portfolio Optimization involves balancing risk and return.",
+    detailed: "Investors should diversify their portfolio to mitigate risks while aiming for optimal returns based on their risk tolerance and investment goals.",
+    charts: true
+  },
+  { 
+    title: "Conclusion", 
+    description: "Understanding the basics of stock trading is crucial.",
+    detailed: "With this knowledge, you're better equipped to make informed investment decisions."
+  }
+];
+let currentStep = 0;
+function renderStep(step) {
+  const timeline = document.getElementById("timeline");
+  const stepDiv = document.createElement("div");
+  stepDiv.className = 'step show';
+  stepDiv.innerHTML = `
+    <div class="step-number">${step + 1}</div>
+    <strong>${tutorialSteps[step].title}</strong>
+    <p>${tutorialSteps[step].description}</p>
+  `;
+  if (tutorialSteps[step].charts) {
+    const chartDiv = document.createElement("div");
+    chartDiv.id = (step === 1) ? "candlestick-chart" : ((step === 7 || step === 8) ? "pie-chart" : "");
+    stepDiv.appendChild(chartDiv);
+    if (step === 1) {
+      renderCandlestickChart(chartDiv);
+    } else if (step === 7 || step === 8) {
+      renderPieChart(chartDiv);
+    }
+  }
+  if (tutorialSteps[step].detailed) {
+    const detailedP = document.createElement("p");
+    detailedP.textContent = tutorialSteps[step].detailed;
+    stepDiv.appendChild(detailedP);
+  }
+  if (tutorialSteps[step].image) {
+    const img = document.createElement("img");
+    img.src = tutorialSteps[step].image;
+    img.alt = tutorialSteps[step].title;
+    img.style.width = '400px';
+    img.style.height = 'auto';
+    stepDiv.appendChild(img);
+  }
+  timeline.appendChild(stepDiv);
+  stepDiv.scrollIntoView({ behavior: "smooth" });
+}
+function renderCandlestickChart(div) {
+  const trace = {
+    x: ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05'],
+    open: [2450, 2550, 2650, 2550, 2350],
+    high: [2600, 2700, 2800, 2600, 2500],
+    low: [2400, 2500, 2600, 2400, 2300],
+    close: [2500, 2600, 2700, 2500, 2400],
+    type: 'candlestick',
+    name: 'RIL Stock',
+    increasing: { line: { color: 'green' } },
+    decreasing: { line: { color: 'red' } }
+  };
+  const data = [trace];
+  const layout = {
+    title: 'RIL Stock Candlestick Chart',
+    xaxis: { title: 'Date' },
+    yaxis: { title: 'Price' }
+  };
+  Plotly.newPlot(div, data, layout);
+}
+function renderPieChart(div) {
+  const data = [{
+    values: [30, 45, 25],
+    labels: ['RIL', 'TCS', 'Macrotech'],
+    type: 'pie'
+  }];
+  const layout = {
+    title: 'Portfolio Distribution'
+  };
+  Plotly.newPlot(div, data, layout);
+}
+document.getElementById('next-step-btn').addEventListener('click', function() {
+  if (currentStep < tutorialSteps.length) {
+    renderStep(currentStep);
+    currentStep++;
+  } else {
+    document.getElementById('next-step-btn').disabled = true;
+    document.getElementById('next-step-btn').innerText = "All steps completed";
+  }
+});
+renderStep(currentStep);
+</script>
+{% endblock %}

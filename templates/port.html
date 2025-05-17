@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stocks Portfolio</title>
+  
+  <!-- MUI CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.0.0-alpha.40/dist/css/material.min.css">
+
+  <!-- Custom CSS for styling -->
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f7f7f7;
+      margin: 20px;
+    }
+    h1 {
+      color: #3f51b5;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .mui-table {
+      width: 80%;
+      margin-top: 20px;
+    }
+    .mui-table th, .mui-table td {
+      padding: 12px;
+      text-align: left;
+    }
+    .mui-table th {
+      background-color: #3f51b5;
+      color: white;
+    }
+    .mui-table tr:nth-child(even) {
+      background-color: #f1f1f1;
+    }
+    .mui-button {
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 4px;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .mui-button:hover {
+      background-color: #303f9f;
+    }
+    .form-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- Title -->
+  <h1>Stocks Portfolio</h1>
+
+  <!-- Table to Display Stocks Data -->
+  <div class="container">
+    <table class="mui-table">
+      <thead>
+        <tr>
+          <th>Stock Name</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stock in stocks %}
+          <tr>
+            <td>{{ stock.ticker }}</td>
+            <td>{{ stock.quantity }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form with POST method to Call /opt -->
+  <div class="button-container" style="display: flex; justify-content: center; gap: 20px;">
+    <div>
+        <form action="/opt" method="POST">
+            <button type="submit" class="mui-button">Optimize Portfolio</button>
+        </form>
+    </div>
+    <div>
+        <form action="/chat" method="POST">
+            <button type="submit" class="mui-button">AI Assist</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+  <!-- Add MUI JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@mui/material@5.0.0-alpha.40/umd/material-ui.production.min.js"></script>
+</body>
+</html>

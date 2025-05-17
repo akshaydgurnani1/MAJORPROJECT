@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Portfolio{% endblock %}
+{% block head %}
+<!-- Refresh portfolio every 2 minutes -->
+<meta http-equiv="refresh" content="120">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>Stock Portfolio</h2>
+  <div class="portfolio-value-box">
+    Total Portfolio Value: {{ sum }}
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Shares</th>
+        <th>Price</th>
+        <th>Total Value</th>
+        <th>Sector</th>
+        <th>52W High</th>
+        <th>52W Low</th>
+        <th>% Change</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stock in stocks %}
+      <tr>
+        <td>{{ stock.name }}</td>
+        <td>{{ stock.quantity }}</td>
+        <td>{{ stock.price }}</td>
+        <td>{{ stock.total_value }}</td>
+        <td>{{ stock.sector }}</td>
+        <td>{{ stock.high_52w }}</td>
+        <td>{{ stock.low_52w }}</td>
+        <td>{{ stock.price_change }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <h2>Portfolio Performance</h2>
+  <div id="chart">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+      var chartData = {{ chart | safe }};
+      Plotly.newPlot('chart', chartData.data, chartData.layout);
+    </script>
+  </div>
+</div>
+<div class="button-container" style="display: flex; justify-content: center; gap: 20px;">
+  <div>
+      <form action="{{ url_for('opt') }}" method="POST">
+          <button type="submit" class="mui-button">Optimize Portfolio</button>
+      </form>
+  </div>
+  <div>
+      <form action="{{ url_for('chat') }}" method="POST">
+          <button type="submit" class="mui-button">AI Assist</button>
+
+      </form>
+  </div>
+  <div>
+    <form action="{{ url_for('diversify') }}" method="GET">
+      <button type="submit" class="mui-button">Diversify</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
